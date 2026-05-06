@@ -436,7 +436,7 @@ export default function Home() {
 
 {/* Features Section */}
 <section className="py-16 lg:py-16">
-        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="space-y-16 lg:space-y-32">
             {features.map((feature, index) => (
               <div key={index}>
@@ -481,9 +481,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+{/* Footer */}
       <footer className="py-12">
-        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-24 relative w-full rounded-3xl overflow-hidden">
             <Image
               src="/logo-placeholder-header.svg"
@@ -493,45 +493,23 @@ export default function Home() {
               className="object-cover"
             />
           </div>
+
+          {/* Legal info — ABL 28 kap. 5 § + GDPR */}
+          <div className="mb-6 flex flex-wrap gap-x-6 gap-y-1">
+            <span className="text-s text-[#808080]">Eaves AB</span>
+            <span className="text-s text-[#808080]">5595464107</span>
+            <span className="text-s text-[#808080]">Stockholm</span>
+          </div>
+
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm" style={{ color: '#808080' }}>
-              © 2025 Eaves AB. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a 
-                href="https://www.threads.com/@joineaves" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm transition-colors footer-link" 
-                style={{ color: '#808080' }}
-              >
-                Threads
-              </a>
-                            <a 
-                href="https://www.tiktok.com/@eaves.ai?lang=en" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm transition-colors footer-link" 
-                style={{ color: '#808080' }}
-              >
-                TikTok
-              </a>
-                            <a 
-                href="https://x.com/Eaves_App" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm transition-colors footer-link" 
-                style={{ color: '#808080' }}
-              >
-                X (Twitter)
-              </a>
-              <a 
-                href="mailto:johan@eaves.ai" 
-                className="text-sm transition-colors footer-link" 
-                style={{ color: '#808080' }}
-              >
-                Contact
-              </a>
+            <p className="text-sm text-[#808080]">© 2025 Eaves AB. All rights reserved.</p>
+            <div className="flex flex-wrap gap-6">
+              <a href="/terms" className="text-sm text-[#808080] transition-colors footer-link">Terms</a>
+              <a href="/privacy" className="text-sm text-[#808080] transition-colors footer-link">Privacy</a>
+              <a href="https://www.threads.com/@joineaves" target="_blank" rel="noopener noreferrer" className="text-sm text-[#808080] transition-colors footer-link">Threads</a>
+              <a href="https://www.tiktok.com/@eaves.ai?lang=en" target="_blank" rel="noopener noreferrer" className="text-sm text-[#808080] transition-colors footer-link">TikTok</a>
+              <a href="https://x.com/Eaves_App" target="_blank" rel="noopener noreferrer" className="text-sm text-[#808080] transition-colors footer-link">X (Twitter)</a>
+              <a href="mailto:johan@eaves.ai" className="text-sm text-[#808080] transition-colors footer-link">Contact</a>
             </div>
           </div>
         </div>
