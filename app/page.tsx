@@ -2,65 +2,125 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { Instrument_Serif } from "next/font/google";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+function TiltQRCode() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [style, setStyle] = useState({});
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -10; // tilt strength
+    const rotateY = ((x - centerX) / centerX) * 10;
+
+    setStyle({
+      transform: `perspective(400px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setStyle({
+      transform:
+        "perspective(400px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
+    });
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="inline-flex p-3 rounded-2xl transition-transform duration-150 ease-out"
+      style={{
+        backgroundColor: "rgba(255,255,255,0.14)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        transformStyle: "preserve-3d",
+        ...style,
+      }}
+    >
+      <Image
+        src="/qr-code.png"
+        alt="Scan to download Eaves"
+        width={128}
+        height={128}
+        className="rounded-md"
+      />
+    </div>
+  );
+}
 
 export default function Home() {
   const trades = [
-    { 
-      investor: "Cathie Wood", 
-      action: "increased position in", 
-      stock: "Airbnb", 
-      change: "0.1%", 
-      newValue: "0.8%", 
+    {
+      investor: "Cathie Wood",
+      action: "increased position in",
+      stock: "Airbnb",
+      change: "0.1%",
+      newValue: "0.8%",
       actionType: "increased",
       investorImage: "/Cathie Wood.png",
       stockImage: "/Airbnb.png"
     },
-    { 
-      investor: "Mortimer Buckley", 
-      action: "increased position in", 
-      stock: "Philip Morris", 
-      change: "0.3%", 
-      newValue: "0.4%", 
+    {
+      investor: "Mortimer Buckley",
+      action: "increased position in",
+      stock: "Philip Morris",
+      change: "0.3%",
+      newValue: "0.4%",
       actionType: "increased",
       investorImage: "/Mortimer Buckley.png",
       stockImage: "/Philip Morris.png"
     },
-    { 
-      investor: "Steven Cohen", 
-      action: "has a new position in", 
-      stock: "Lockheed Martin", 
-      change: "0.2%", 
-      newValue: null, 
+    {
+      investor: "Steven Cohen",
+      action: "has a new position in",
+      stock: "Lockheed Martin",
+      change: "0.2%",
+      newValue: null,
       actionType: "new",
       investorImage: "/Steven Cohen.png",
       stockImage: "/Lockheed Martin.png"
     },
-    { 
-      investor: "Andreas Halvorsen", 
-      action: "increased position in", 
-      stock: "Visa", 
-      change: "1.7%", 
-      newValue: "2.6%", 
+    {
+      investor: "Andreas Halvorsen",
+      action: "increased position in",
+      stock: "Visa",
+      change: "1.7%",
+      newValue: "2.6%",
       actionType: "increased",
       investorImage: "/Andreas Halvorsen.png",
       stockImage: "/VISA.png"
     },
-    { 
-      investor: "Jim Simons", 
-      action: "decreased position in", 
-      stock: "AppLovin", 
-      change: "0.9%", 
-      newValue: "0.6%", 
+    {
+      investor: "Jim Simons",
+      action: "decreased position in",
+      stock: "AppLovin",
+      change: "0.9%",
+      newValue: "0.6%",
       actionType: "decreased",
       investorImage: "/Jim Simons.png",
       stockImage: "/AppLovin.png"
     },
-    { 
-      investor: "Ray Dalio", 
-      action: "decreased position in", 
-      stock: "SPY", 
-      change: "6.7%", 
-      newValue: "6.5%", 
+    {
+      investor: "Ray Dalio",
+      action: "decreased position in",
+      stock: "SPY",
+      change: "6.7%",
+      newValue: "6.5%",
       actionType: "decreased",
       investorImage: "/Ray Dalio.png",
       stockImage: "/SPY.png"
@@ -70,18 +130,18 @@ export default function Home() {
   const renderTradeCard = (trade: typeof trades[0], key: string | number) => {
     const actionWord = trade.actionType === "new" ? "new" : trade.actionType === "increased" ? "increased" : "decreased";
     const actionColor = trade.actionType === "decreased" ? "#C1154F" : "#0978B3";
-    
+
     const actionIndex = trade.action.toLowerCase().indexOf(actionWord);
     const beforeAction = actionIndex >= 0 ? trade.action.substring(0, actionIndex) : "";
     const afterAction = actionIndex >= 0 ? trade.action.substring(actionIndex + actionWord.length) : "";
     const highlightedAction = actionIndex >= 0 ? trade.action.substring(actionIndex, actionIndex + actionWord.length) : "";
-    
+
     return (
-      <div 
-        key={key} 
+      <div
+        key={key}
         className="flex-shrink-0 w-[320px] bg-white p-8 border border-gray-100"
         style={
-          { 
+          {
             boxShadow: '0 4px 80px rgba(0, 0, 0, 0.06), 0 2px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.04)',
             borderRadius: '24px'
           }
@@ -89,7 +149,7 @@ export default function Home() {
       >
         <div className="relative mb-4">
           <div className="relative w-[56px] h-[56px]">
-            <div style={{ 
+            <div style={{
               transform: 'rotate(-4deg)',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
               borderRadius: '50%',
@@ -106,9 +166,9 @@ export default function Home() {
                 className="rounded-full"
               />
             </div>
-            <div 
+            <div
               className="absolute -bottom-1 -right-1 w-[40px] h-[40px] rounded-xl overflow-hidden"
-              style={{ 
+              style={{
                 transform: 'rotate(4deg)',
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04), inset 0 0 0 0.5px rgba(0, 0, 0, 0.1)',
                 border: '0.5px solid rgba(0, 0, 0, 0.1)'
@@ -164,26 +224,26 @@ export default function Home() {
               // Wait 800ms before starting the animation
               setTimeout(() => {
                 if (hasInteracted) return;
-                
+
                 let startTime: number | null = null;
                 const duration = 1500; // Total animation duration in ms
                 const startPosition = 50;
                 const peakPosition = 55;
-                
+
                 const animate = (currentTime: number) => {
                   if (!startTime) startTime = currentTime;
                   const elapsed = currentTime - startTime;
                   const progress = Math.min(elapsed / duration, 1);
-                  
+
                   // Ease in-out function for smooth animation
                   const easeInOutCubic = (t: number) => {
                     return t < 0.5
                       ? 4 * t * t * t
                       : 1 - Math.pow(-2 * t + 2, 3) / 2;
                   };
-                  
+
                   const easedProgress = easeInOutCubic(progress);
-                  
+
                   // Go from 50 to 70 and back to 50
                   let position;
                   if (easedProgress < 0.5) {
@@ -193,16 +253,16 @@ export default function Home() {
                     // Second half: 70 to 50
                     position = peakPosition - (peakPosition - startPosition) * ((easedProgress - 0.5) * 2);
                   }
-                  
+
                   setSliderPosition(position);
-                  
+
                   if (progress < 1) {
                     requestAnimationFrame(animate);
                   } else {
                     setSliderPosition(50);
                   }
                 };
-                
+
                 requestAnimationFrame(animate);
               }, 400);
             }
@@ -354,76 +414,93 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Newsletter Header */}
-      <header style={{ borderBottomWidth: '0px', borderBottomColor: 'rgba(0, 0, 0, 0)', borderBottomStyle: 'none', borderImage: 'none' }}>
-        <div className="max-w-5xl mx-auto px-6 lg:px-8 py-8 flex items-center justify-between" style={{ backgroundClip: 'unset', color: 'rgba(0, 0, 0, 1)' }}>
-          <Image
-            src="/logo-placeholder-header.svg"
-            alt="Logo"
-            width={72}
-            height={20}
-          />
-          <p className="text-sm font-normal" style={{ color: '#808080' }}></p>
+      {/* Hero Section */}
+      <section className="relative w-full overflow-hidden">
+        {/* Fixed nav pill - stays on scroll */}
+        <div className="fixed top-4 sm:top-6 left-0 right-0 px-4 sm:px-6 lg:px-8 z-50">
+          <div
+            className="flex items-center justify-between w-full max-w-[420px] mx-auto rounded-full pl-4 pr-1.5 py-1.5"
+            style={{
+              backgroundColor: "rgba(60,60,60,0.55)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo-placeholder-header.svg"
+                alt="Eaves"
+                width={72}
+                height={18}
+                className="brightness-0 invert"
+              />
+            </div>
+            <a href="http://share.eaves.ai/" target="_blank" rel="noopener noreferrer">
+              <button className="bg-white text-black rounded-full px-5 py-2 text-sm font-medium">
+                Get the app
+              </button>
+            </a>
+          </div>
         </div>
-      </header>
 
-     {/* Hero Section */}
-<section className="max-w-7xl mx-auto px-6 lg:px-8 pt-20 pb-8 lg:pt-16 lg:pb-8" style={{ borderWidth: '0px', borderColor: 'rgba(0, 0, 0, 0)', borderImage: 'none', borderStyle: 'none' }}>
-  <div className="text-center">
-    <div className="flex justify-center mb-8">
-      <div style={{
-        borderRadius: '20px',
-        boxShadow: '0 4px 80px rgba(0, 0, 0, 0.06), 0 2px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.04)',
-        overflow: 'hidden',
-        display: 'inline-block'
-      }}>
-        <Image
-          src="/logo-placeholder-top.svg"
-          alt="Eaves logo"
-          width={64}
-          height={64}
-        />
-      </div>
-    </div>
-    <h1 className="text-[56px] max-w-lg mx-auto items-center font-medium mb-8 leading-[54px] tracking-[-1px]" style={{ color: '#222' }}>
-      Track hedge fund portfolios
-    </h1>
-    <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto leading-[1.6] font-normal" style={{ color: '#808080' }}>
-      See what top investors, fund managers and politicians are buying and selling. Analyze their portfolios with AI insights.
-    </p>
-    
-    {/* BUTTON CONTAINER START */}
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-      <a href="https://apps.apple.com/app/eaves-ai-investment-watcher/id6754205255" target="_blank" rel="noopener noreferrer">
-        <button className="inline-flex items-center gap-2 px-6 py-3 text-white rounded-full text-base font-medium transition-all active:scale-[0.97] active:opacity-90" style={{ backgroundColor: '#000' }}>
+        {/* Background image */}
+        <div className="relative w-full h-[85vh] sm:h-auto sm:aspect-[3/2] md:aspect-[16/9]">
           <Image
-            src="/apple-logo.svg"
-            alt="Apple"
-            width={16}
-            height={16}
+            src="/hero-bg.png"
+            alt="Eaves app on phone"
+            fill
+            className="object-cover object-top"
+            priority
           />
-          Download on App Store
-        </button>
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.eaves.ai" target="_blank" rel="noopener noreferrer">
-        <button className="inline-flex items-center gap-2 px-6 py-3 text-white rounded-full text-base font-medium transition-all active:scale-[0.97] active:opacity-90" style={{ backgroundColor: '#000' }}>
-          <Image
-            src="/google-logo.svg"
-            alt="Google"
-            width={20}
-            height={20}
-          />
-          Download on Google Play
-        </button>
-      </a>
-    </div>
-    {/* BUTTON CONTAINER END */}
 
-  </div>
-</section>
+          {/* Headline + copy + QR, anchored to bottom via flexbox (never clips) */}
+          <div className="absolute inset-0 flex flex-col items-center justify-end text-center px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10 md:pb-40 lg:pb-56 translate-y-0 md:translate-y-[100px]">
+            <h1
+              className={`${instrumentSerif.className} text-white text-[56px] sm:text-[44px] md:text-[52px] lg:text-[68px] leading-[1.05] tracking-[-0.5px] mb-3 sm:mb-4 max-w-[320px] sm:max-w-md md:max-w-2xl`}
+            >
+              Track hedge fund portfolios
+            </h1>
+            <p
+              className="text-[#c9c9c9] sm:text-sm md:text-lg leading-[1.5] sm:leading-[1.6] max-w-[260px] sm:max-w-sm md:max-w-md mb-4 sm:mb-6 line-clamp-4"
+              style={{ textWrap: "balance" }}
+            >
+              See what top investors and politicians are buying and selling,
+              with AI-powered portfolio insights.
+            </p>
+
+            {/* QR code (desktop/tablet only) */}
+            <div className="hidden md:block">
+              <TiltQRCode />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section - Part 1 (SEC 13F clarity) */}
+      <section className="pt-16 lg:pt-16">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          {(() => {
+            const feature = features[0];
+            return (
+              <div>
+                <h2 className="max-w-md mx-auto text-3xl md:text-4xl font-medium leading-[1.2] tracking-[-0.025em] text-center mb-4" style={{ color: '#222' }}>
+                  {feature.title}
+                </h2>
+                <p className="max-w-xl mx-auto text-base md:text-lg leading-[1.6] font-normal mb-12 text-center" style={{ color: '#808080' }}>
+                  {feature.description}
+                </p>
+                <BeforeAfterSlider
+                  beforeImage={feature.beforeImage!}
+                  afterImage={feature.afterImage!}
+                />
+              </div>
+            );
+          })()}
+        </div>
+      </section>
 
       {/* Live Trades Feed - Auto-scrolling Ticker */}
-      <section className="w-full py-12 overflow-y-visible" style={{ overflow: 'hidden' }}>
+      <section className="w-full py-16 overflow-y-visible my-16" style={{ overflow: 'hidden' }}>
         <div className="ticker-container" style={{ overflow: 'visible' }}>
           <div className="ticker-track" style={{ gap: '24px' }}>
             {/* First set of cards */}
@@ -434,11 +511,11 @@ export default function Home() {
         </div>
       </section>
 
-{/* Features Section */}
-<section className="py-16 lg:py-16">
+      {/* Features Section - Remaining features */}
+      <section className="py-16 lg:py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="space-y-16 lg:space-y-32">
-            {features.map((feature, index) => (
+            {features.slice(1).map((feature, index) => (
               <div key={index}>
                 <h2 className="max-w-md mx-auto text-3xl md:text-4xl font-medium leading-[1.2] tracking-[-0.025em] text-center mb-4" style={{ color: '#222' }}>
                   {feature.title}
@@ -448,9 +525,9 @@ export default function Home() {
                 </p>
                 {/* Feature Images */}
                 {feature.type === "slider" ? (
-                  <BeforeAfterSlider 
-                    beforeImage={feature.beforeImage!} 
-                    afterImage={feature.afterImage!} 
+                  <BeforeAfterSlider
+                    beforeImage={feature.beforeImage!}
+                    afterImage={feature.afterImage!}
                   />
                 ) : feature.type === "single" ? (
                   <div className="relative w-full aspect-square md:aspect-[2/1] bg-gray-100 rounded-3xl overflow-hidden">
@@ -481,7 +558,7 @@ export default function Home() {
         </div>
       </section>
 
-{/* Footer */}
+      {/* Footer */}
       <footer className="py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-24 relative w-full rounded-3xl overflow-hidden">
